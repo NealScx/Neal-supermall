@@ -1,6 +1,6 @@
 <template>
   <div id="tab-bar">
-      <slot></slot>
+    <slot></slot>
   </div>
 </template>
 
@@ -8,7 +8,7 @@
 export default {};
 </script>
 
-<style>
+<style scoped>
 #tab-bar {
   display: flex;
   background-color: rgb(233, 233, 233);
@@ -18,7 +18,8 @@ export default {};
   right: 0;
   bottom: 0;
 
-  box-shadow: 0 -3px 1px rgba(100, 100, 100, 0.1);
-}
+  box-shadow: 0 -1px 1px rgba(100, 100, 100, 0.1);
 
+  z-index: 9;
+}
 </style>
