@@ -108,7 +108,7 @@
 
 <script>
 import BScroll from "better-scroll";
-
+  
 export default {
   name: "Category",
   // 组件创建完后调用

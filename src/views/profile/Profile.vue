@@ -109,9 +109,10 @@
 
 <script>
 import scroll from "../../components/common/scroll/scroll.vue";
+
 export default {
-  components: { scroll },
   name: "Profile",
+  components: { scroll },
 };
 </script>
 
