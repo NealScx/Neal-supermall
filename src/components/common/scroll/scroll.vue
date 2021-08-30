@@ -3,15 +3,6 @@
   <div class="wrapper" ref="wrapper">
     <div class="content">
       <slot>
-        <home-swiper :banners="banners"></home-swiper>
-        <recommend-view :recommends="recommends"></recommend-view>
-        <feature-view></feature-view>
-        <tab-control
-          class="tab-control"
-          :titles="['流行', '新款', '精选']"
-          @tabClick="tabClick"
-        ></tab-control>
-        <goods-list :goods="showGoods" />
       </slot>
     </div>
   </div>

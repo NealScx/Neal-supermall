@@ -13,11 +13,15 @@
     </div>
     <div class="info-service">
       <span
-        class="info-service"
+        class="info-service-item"
         v-for="index in goods.services.length - 1"
         :key="index"
       >
-        <img src="goods.services[index-1].iconS" alt="" />
+        <img
+          v-if="goods.services[index - 1].icon"
+          :src="goods.services[index - 1].icon"
+          alt=""
+        />
         <span>{{ goods.services[index - 1].name }}</span>
       </span>
     </div>
@@ -46,7 +50,7 @@ export default {
   border-bottom: 5px solid #f2f5f8;
 }
 
-.info-title {
+.info-titile {
   color: #222;
 }
 
@@ -85,7 +89,13 @@ export default {
   font-size: 13px;
   border-bottom: 1px solid rgba(100, 100, 100, 0.1);
   justify-content: space-between;
+}
+
+.info-service {
+  display: flex;
+  justify-content: space-between;
   line-height: 60px;
+  white-space: nowrap;
 }
 
 .info-service-item img {
