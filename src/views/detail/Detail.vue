@@ -1,7 +1,17 @@
 <template>
   <div id="detail">
-    <detail-nav-bar class="detail-nav" @titleClick="titleClick" />
-    <scroll class="content" ref="scroll" :pullUpLoad="true">
+    <detail-nav-bar
+      class="detail-nav"
+      @titleClick="titleClick"
+      ref="detailNav"
+    />
+    <scroll
+      class="content"
+      ref="scroll"
+      :pullUpLoad="true"
+      :probeType="3"
+      @scroll="contentScroll"
+    >
       <!-- 属性:topImages 传入值:top-images -->
       <detail-swiper :top-images="topImages" />
       <detail-base-info :goods="goods" />
@@ -61,6 +71,7 @@ export default {
       recommends: [],
       themeTopYs: [],
       getThemeTopY: null,
+      currentIndex: 0,
     };
   },
   created() {
@@ -137,6 +148,36 @@ export default {
     titleClick(index) {
       // console.log(index);
       this.$refs.scroll.scrollTo(0, -this.themeTopYs[index], 500);
+    },
+    contentScroll(position) {
+      // 1.获取y值
+      const positionY = -position.y;
+
+      // 2.positionY和主题中值进行对比
+      // [0, 6841, 7457, 7768]
+
+      // positionY 在 0 和 6841之间，index = 0
+      // positionY 在 =6841 和 7457之间，index = 1
+      // positionY 在 7457 和 7768之间，index = 2
+
+      // positionY >=7768时，index = 3
+      let length = this.themeTopYs.length;
+      for (let i = 0; i < this.themeTopYs.length; i++) {
+        // if (positionY > this.themeTopYs[i] && positionY < this.themeTopYs[i+1]) {
+        //   console.log(i);
+        // }
+        if (
+          this.currentIndex !== i &&
+          ((i < length - 1 &&
+            positionY >= this.themeTopYs[i] &&
+            positionY < this.themeTopYs[i + 1]) ||
+            (i == length - 1 && positionY >= this.themeTopYs[i]))
+        ) {
+          this.currentIndex = i;
+          console.log(this.currentIndex);
+          this.$refs.detailNav.currentIndex = this.currentIndex;
+        }
+      }
     },
   },
 };
