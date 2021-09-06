@@ -43,11 +43,10 @@ import FeatureView from "./childComps/FeatureView.vue";
 import TabControl from "../../components/content/TabControl/TabControl.vue";
 import GoodsList from "../../components/content/goods/GoodsList.vue";
 import Scroll from "../../components/common/scroll/scroll.vue";
-import BackTop from "../../components/content/backTop/BackTop";
+// import BackTop from "../../components/content/backTop/BackTop";
+import { backTopMixin } from "common/mixin";
 
 import { getHomeMultidata, getHomeGoods } from "network/home";
-// import Swiper from 'components/common/swiper/Swiper.vue';
-// import SwiperItem from 'components/common/swiper/SwiperItem';
 
 export default {
   name: "Home",
@@ -59,8 +58,8 @@ export default {
     TabControl,
     GoodsList,
     Scroll,
-    BackTop,
   },
+  mixins: [backTopMixin],
   data() {
     return {
       banners: [],
@@ -71,7 +70,6 @@ export default {
         sell: { page: 0, list: [] },
       },
       currentType: "pop",
-      isShowBackTop: false,
       tabOffsetTop: 0,
       isTabFixed: false,
       saveY: 0,
@@ -125,19 +123,20 @@ export default {
       this.$refs.tabControl1.currentIndex = index;
       this.$refs.tabControl2.currentIndex = index;
     },
-    backClick() {
-      this.$refs.scroll.scrollTo(0, 0);
-    },
+    // backClick() {
+    //   this.$refs.scroll.scrollTo(0, 0);
+    // },
     // 通过自定义事件使用从Scroll.vue传来的position
     contentScroll(position) {
       // 1.判断BackTop是否显示
       // console.log(position);
-      this.isShowBackTop = -position.y > 1000;
+      // this.isShowBackTop = -position.y > 1000;  mixin
+      this.listenShowBackTop(position);
 
       // 2.决定tabControl是否吸顶(position:fixed)
       this.isTabFixed = -position.y > this.tabOffsetTop;
-      console.log(position.y);
-      console.log(this.tabOffsetTop);
+      // console.log(position.y);
+      // console.log(this.tabOffsetTop);
     },
     loadMore() {
       this.getHomeGoods(this.currentType);

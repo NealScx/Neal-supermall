@@ -12,6 +12,11 @@
       :probeType="3"
       @scroll="contentScroll"
     >
+    <ul>
+      <li v-for="item in $store.state.cartList" :key="item.id">
+        {{item}}
+      </li>
+    </ul>
       <!-- 属性:topImages 传入值:top-images -->
       <detail-swiper :top-images="topImages" />
       <detail-base-info :goods="goods" />
@@ -21,6 +26,8 @@
       <detail-comment-info ref="comment" :comment-info="commentInfo" />
       <goods-list ref="recommend" :goods="recommends" />
     </scroll>
+    <detail-bottom-bar @addCart="addToCart" />
+    <back-top @click.native="backClick" v-show="isShowBackTop" />
   </div>
 </template>
 
@@ -36,6 +43,7 @@ import GoodsList from "../../components/content/goods/GoodsList.vue";
 
 import Scroll from "../../components/common/scroll/scroll.vue";
 import { debouce } from "../../common/utils";
+import { backTopMixin } from "common/mixin";
 
 import {
   getDetail,
@@ -44,6 +52,7 @@ import {
   Shop,
   GoodsParam,
 } from "network/detail";
+import DetailBottomBar from "./childComps/DetailBottomBar.vue";
 
 export default {
   name: "Detail",
@@ -57,8 +66,9 @@ export default {
     DetailCommentInfo,
     Scroll,
     GoodsList,
+    DetailBottomBar,
   },
-
+  mixins: [backTopMixin],
   data() {
     return {
       iid: null,
@@ -131,6 +141,7 @@ export default {
       this.themeTopYs.push(this.$refs.params.$el.offsetTop - 44);
       this.themeTopYs.push(this.$refs.comment.$el.offsetTop - 44);
       this.themeTopYs.push(this.$refs.recommend.$el.offsetTop - 44);
+      this.themeTopYs.push(Number.MAX_VALUE);
 
       console.log(this.themeTopYs);
     });
@@ -162,22 +173,39 @@ export default {
 
       // positionY >=7768时，index = 3
       let length = this.themeTopYs.length;
-      for (let i = 0; i < this.themeTopYs.length; i++) {
+      for (let i = 0; i < length - 1; i++) {
         // if (positionY > this.themeTopYs[i] && positionY < this.themeTopYs[i+1]) {
         //   console.log(i);
         // }
         if (
+          // this.currentIndex !== i &&
+          // ((i < length - 1 &&
+          //   positionY >= this.themeTopYs[i] &&
+          //   positionY < this.themeTopYs[i + 1]) ||
+          //   (i == length - 1 && positionY >= this.themeTopYs[i]))
           this.currentIndex !== i &&
-          ((i < length - 1 &&
-            positionY >= this.themeTopYs[i] &&
-            positionY < this.themeTopYs[i + 1]) ||
-            (i == length - 1 && positionY >= this.themeTopYs[i]))
+          positionY >= this.themeTopYs[i] &&
+          positionY < this.themeTopYs[i + 1]
         ) {
           this.currentIndex = i;
-          console.log(this.currentIndex);
           this.$refs.detailNav.currentIndex = this.currentIndex;
         }
       }
+      this.listenShowBackTop(position); // mixin
+    },
+    addToCart() {
+      // 1.获取购物车需要展示的信息
+      const product = {};
+      product.image = this.topImages[0];
+      product.title = this.goods.title;
+      product.desc = this.goods.desc;
+      product.price = this.goods.realPrice;
+      product.iid = this.iid;
+
+      // 2.将商品添加到购物车
+      // this.$store.cartList.push(product)
+      // this.$store.commit('addCart',product)
+      this.$store.dispatch('addCart',product)
     },
   },
 };
@@ -198,6 +226,6 @@ export default {
 }
 
 .content {
-  height: calc(100% - 44px);
+  height: calc(100% - 44px - 49px);
 }
 </style>
