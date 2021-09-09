@@ -12,11 +12,11 @@
       :probeType="3"
       @scroll="contentScroll"
     >
-    <ul>
+      <!-- <ul>
       <li v-for="item in $store.state.cartList" :key="item.id">
         {{item}}
       </li>
-    </ul>
+    </ul> -->
       <!-- 属性:topImages 传入值:top-images -->
       <detail-swiper :top-images="topImages" />
       <detail-base-info :goods="goods" />
@@ -28,6 +28,8 @@
     </scroll>
     <detail-bottom-bar @addCart="addToCart" />
     <back-top @click.native="backClick" v-show="isShowBackTop" />
+    <!-- <toast :message="message" :show="show" /> -->
+    <!-- 传入字符串时可以不写: -->
   </div>
 </template>
 
@@ -39,11 +41,10 @@ import DetailShopInfo from "./childComps/DetailShopInfo.vue";
 import DetailGoodsInfo from "./childComps/DetailGoodsInfo.vue";
 import DetailParamInfo from "./childComps/DetailParamInfo.vue";
 import DetailCommentInfo from "./childComps/DetailCommentInfo.vue";
-import GoodsList from "../../components/content/goods/GoodsList.vue";
+import DetailBottomBar from "./childComps/DetailBottomBar.vue";
 
 import Scroll from "../../components/common/scroll/scroll.vue";
-import { debouce } from "../../common/utils";
-import { backTopMixin } from "common/mixin";
+import GoodsList from "../../components/content/goods/GoodsList.vue";
 
 import {
   getDetail,
@@ -52,7 +53,12 @@ import {
   Shop,
   GoodsParam,
 } from "network/detail";
-import DetailBottomBar from "./childComps/DetailBottomBar.vue";
+
+import { debouce } from "../../common/utils";
+import { backTopMixin } from "common/mixin";
+
+import { mapActions } from "vuex";
+// import Toast from "../../components/common/toast/Toast.vue";
 
 export default {
   name: "Detail",
@@ -67,6 +73,7 @@ export default {
     Scroll,
     GoodsList,
     DetailBottomBar,
+    // Toast,
   },
   mixins: [backTopMixin],
   data() {
@@ -82,6 +89,8 @@ export default {
       themeTopYs: [],
       getThemeTopY: null,
       currentIndex: 0,
+      // message: "",
+      // show: false,
     };
   },
   created() {
@@ -150,6 +159,10 @@ export default {
   updated() {},
 
   methods: {
+    // ...mapActions(["addCart"]),  数组方式
+    ...mapActions({
+      add: "addCart", // 对象方式
+    }),
     imageLoad() {
       // console.log(this.$refs.scroll.scroll);
       // console.log(this.$refs.scroll.scroll.refresh);
@@ -202,10 +215,25 @@ export default {
       product.price = this.goods.realPrice;
       product.iid = this.iid;
 
-      // 2.将商品添加到购物车
+      // 2.将商品添加到购物车(1.Promise 2.mapActions)
       // this.$store.cartList.push(product)
       // this.$store.commit('addCart',product)
-      this.$store.dispatch('addCart',product)
+
+      // 通过mapActions将addCart方法从Actions映射过来
+      this.add(product).then((res) => {
+        //   this.show = true;
+        //   this.message = res;
+
+        //   setTimeout(() => {
+        //     this.show = false;
+        //     this.message = "";
+        //   }, 1500);
+        this.$toast.show(res);
+      });
+
+      // this.$store.dispatch("addCart", product).then((res) => {
+      //   console.log(res);
+      // });
     },
   },
 };

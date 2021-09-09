@@ -1,13 +1,17 @@
 <template>
   <div class="bottom-bar">
     <div class="check-content">
-      <check-button class="check-button" />
+      <check-button
+        :isChecked="isSelectAll"
+        class="check-button"
+        @click.native="checkClick"
+      />
       <span>全选</span>
     </div>
 
     <div class="price">总价: {{ totalPrice }}</div>
 
-    <div class="calculate">去结算({{ checkLength }})</div>
+    <div class="calculate" @click="calcClick">去结算({{ checkLength }})</div>
   </div>
 </template>
 
@@ -37,6 +41,41 @@ export default {
     checkLength() {
       return this.cartList.filter((item) => item.checked).length;
     },
+    isSelectAll() {
+      if (this.cartList.length === 0) {
+        return false;
+      }
+
+      // 1.使用filter
+      // return !this.cartList.filter((item) => item.checked).length;
+
+      // 2.使用find
+      // return !this.cartList.find((item) => !item.checked);
+
+      // 3.普通遍历方法
+      for (let item of this.cartList) {
+        if (!item.checked) {
+          return false;
+        }
+      }
+      return true;
+    },
+  },
+  methods: {
+    checkClick() {
+      if (this.isSelectAll) {
+        // 全不选中
+        this.cartList.forEach((item) => (item.checked = false));
+      } else {
+        this.cartList.forEach((item) => (item.checked = true));
+      }
+    },
+    calcClick() {
+      console.log(this.cartList);
+      // if ((this.cartList.checked).length === 0) {
+      //   this.$toast.show("请选择商品", 2000);
+      // }
+    },
   },
 };
 </script>
@@ -45,6 +84,7 @@ export default {
 .bottom-bar {
   position: relative;
   display: flex;
+  align-items: center;
 
   height: 40px;
   line-height: 40px;
@@ -72,6 +112,8 @@ export default {
 
 .calculate {
   width: 80px;
+  height: 30px;
+  line-height: 30px;
   text-align: center;
   font-size: 14px;
   background-color: rgb(255, 152, 169);
