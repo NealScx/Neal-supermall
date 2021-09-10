@@ -71,10 +71,9 @@ export default {
       }
     },
     calcClick() {
-      console.log(this.cartList);
-      // if ((this.cartList.checked).length === 0) {
-      //   this.$toast.show("请选择商品", 2000);
-      // }
+      if (!this.isSelectAll) {
+        this.$toast.show("请选择商品", 2000);
+      }
     },
   },
 };
