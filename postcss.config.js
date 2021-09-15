@@ -10,7 +10,7 @@ module.exports = {
       selectiorBlackList: ['ignore', 'tab-bar', 'tab-bar-item'],
       minPixelValue: 1,
       mediaQuery: false,
-      exclude: [/TabBar$/]   //正则表达式
+      exclude: [/TabBar/,/Home/]   //正则表达式
 
       // 1.在js中使用正则:/正则相关规则/
       // 2.exclude中存放的元素必须是正则表达式

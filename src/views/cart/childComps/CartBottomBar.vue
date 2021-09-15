@@ -105,8 +105,9 @@ export default {
 }
 
 .price {
-  margin-left: 20px;
   flex: 1;
+  text-align: center;
+  font-weight: 700;
 }
 
 .calculate {

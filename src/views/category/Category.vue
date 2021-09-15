@@ -30,6 +30,6 @@ export default {
 
 <style scope>
 body {
-  height: 15000px;
+  height: 1500px;
 }
 </style>

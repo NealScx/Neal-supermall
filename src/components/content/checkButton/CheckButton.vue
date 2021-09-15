@@ -20,6 +20,12 @@ export default {
 .check-button {
   border-radius: 50%;
   border: 1px solid #aaa;
+  text-align: center;
+}
+
+.check-button img{
+  width: 16px;
+  height: 16px;
 }
 
 .check {

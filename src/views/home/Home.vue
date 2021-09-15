@@ -2,7 +2,7 @@
   <div id="home">
     <nav-bar class="home-nav">
       <div slot="center">购物街</div>
-      </nav-bar>
+    </nav-bar>
     <tab-control
       :titles="['流行', '新款', '精选']"
       @tabClick="tabClick"
@@ -181,6 +181,7 @@ export default {
 .home-nav {
   background-color: var(--color-tint);
   color: white;
+  font-size: 16px;
 
   /* 在使用浏览器原生滚动时，为了让导航不跟随一起滚动 */
   position: relative;

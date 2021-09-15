@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <!-- exclude需要组件有name值 -->
-    <keep-alive exclude="Detail"> 
+    <keep-alive exclude="Detail">
       <router-view></router-view>
     </keep-alive>
     <main-tab-bar></main-tab-bar>
@@ -20,4 +20,5 @@ export default {
 
 <style scoped>
 @import "assets/css/base.css";
+
 </style>
